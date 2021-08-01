@@ -3,7 +3,7 @@ import axios  from 'axios';
 
 
 const Search = () =>{
-   const [term, setTerm ] = useState('programming');
+   const [term, setTerm ] = useState('');
    const [results, setResults] = useState([]);
 
    console.log(results);
@@ -16,26 +16,34 @@ const Search = () =>{
                 list: 'search',
                 origin: '*',
                 format: 'json',
-                srsearch: term
+                srsearch: term,
             }
         });
 
         setResults(data.query.search);
     };
-
-        search();
+         if(term){
+            search();
+         }
+  
 
    }, [term]);
+
 
    const rendredResults = results.map((result) =>{
        return (
               <div key={result.pageid} className="item">
-                       <div className="content">
+                           <div className="right floated content">
+                               <a
+                                href={`https://en.wikipedia.org?curid=${result.pageid}`} 
+                               className="ui button"
+                               >GO</a>
+                               </div>
                          <div className="header">
                                {result.title}
                               </div> 
-                              {result.snippet}
-                       </div>
+                              <span dangerouslySetInnerHTML={{__html: result.snippet}}></span>
+                  
                  </div>
        );
    })
